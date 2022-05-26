@@ -23,6 +23,11 @@ export default function App() {
   const redirectToArticles = () => navigate('/articles')
 
   const logout = () => {
+    if (localStorage) {
+      localStorage.removeItem("token")
+      setMessage("Goodbye!")
+    }
+    redirectToLogin()
     // ✨ implement
     // If a token is in local storage it should be removed,
     // and a message saying "Goodbye!" should be set in its proper state.
@@ -31,6 +36,7 @@ export default function App() {
   }
 
   const login = ({ username, password }) => {
+    setMessage("")
     setSpinnerOn(true)
     axios.post(loginUrl, {username, password})
       .then(res => {
@@ -49,6 +55,17 @@ export default function App() {
   }
 
   const getArticles = () => {
+    setMessage("")
+    axios.get(articlesUrl, {
+      headers: {
+        authorization: localStorage.getItem("token")
+      }
+    })
+      .then(res => {
+        setMessage(res.data.message)
+        setArticles(res.data.articles)
+      })
+      .catch(err => console.log(err))
     // ✨ implement
     // We should flush the message state, turn on the spinner
     // and launch an authenticated request to the proper endpoint.
@@ -79,7 +96,7 @@ export default function App() {
     // ✨ fix the JSX: `Spinner`, `Message`, `LoginForm`, `ArticleForm` and `Articles` expect props ❗
     <>
       <Spinner />
-      <Message />
+      <Message message={message} />
       <button id="logout" onClick={logout}>Logout from app</button>
       <div id="wrapper" style={{ opacity: spinnerOn ? "0.25" : "1" }}> {/* <-- do not change this line */}
         <h1>Advanced Web Applications</h1>
@@ -92,7 +109,7 @@ export default function App() {
           <Route path="articles" element={
             <>
               <ArticleForm />
-              <Articles />
+              <Articles getArticles={getArticles} articles={articles}/>
             </>
           } />
         </Routes>
