@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom'
 import PT from 'prop-types'
 
 export default function Articles(props) {
-  const { getArticles, articles } = props
+  const { getArticles, articles, updateArticle, deleteArticle } = props
   // ✨ where are my props? Destructure them here
 
   // ✨ implement conditional logic: if no token exists
@@ -11,7 +11,6 @@ export default function Articles(props) {
 
   useEffect(() => {
     getArticles()
-    // ✨ grab the articles here, on first render only
   }, [])
 
   return (
@@ -31,8 +30,16 @@ export default function Articles(props) {
                   <p>Topic: {art.topic}</p>
                 </div>
                 <div>
-                  <button disabled={true} onClick={Function.prototype}>Edit</button>
-                  <button disabled={true} onClick={Function.prototype}>Delete</button>
+                  <button 
+                    disabled={false}
+                    onClick={() => updateArticle(art.article_id)}>
+                    Edit
+                  </button>
+                  <button 
+                    disabled={false} 
+                    onClick={() => deleteArticle(art.article_id)}>
+                    Delete
+                  </button>
                 </div>
               </div>
             )

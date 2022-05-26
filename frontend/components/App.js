@@ -70,11 +70,31 @@ export default function App() {
   }
 
   const updateArticle = ({ article_id, article }) => {
+    setCurrentArticleId(article)
     // ✨ implement
     // You got this!
   }
 
   const deleteArticle = article_id => {
+    axios.delete(`${articlesUrl}/${article_id}`, {
+      headers: {
+        authorization: localStorage.getItem("token")
+      }
+    })
+      .then(res => {
+        console.log(res)
+        setMessage(res.data.message)
+        axios.get(articlesUrl, {
+          headers: {
+            authorization: localStorage.getItem("token")
+          }
+        })
+        .then(res => {
+          setArticles(res.data.articles)
+        })
+        .catch(err => console.log(err))
+      })
+      .catch(err => console.log(err))
     // ✨ implement
   }
 
@@ -94,8 +114,16 @@ export default function App() {
           <Route path="/" element={<LoginForm login={login} />} />
           <Route path="articles" element={
             <>
-              <ArticleForm postArticle={postArticle} currentArticleId={currentArticleId} />
-              <Articles getArticles={getArticles} articles={articles}/>
+              <ArticleForm 
+                postArticle={postArticle} 
+                currentArticleId={currentArticleId} 
+              />
+              <Articles 
+                getArticles={getArticles} 
+                articles={articles}
+                updateArticle={updateArticle}
+                deleteArticle={deleteArticle}
+              />
             </>
           } />
         </Routes>

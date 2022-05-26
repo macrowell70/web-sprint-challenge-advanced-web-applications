@@ -36,7 +36,7 @@ export default function ArticleForm(props) {
     // ✨ fix the JSX: make the heading display either "Edit" or "Create"
     // and replace Function.prototype with the correct function
     <form id="form" onSubmit={onSubmit}>
-      <h2>Create Article</h2>
+      <h2>{currentArticleId ? "Edit" : "Create"} Article</h2>
       <input
         maxLength={50}
         onChange={onChange}
