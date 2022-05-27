@@ -63,9 +63,18 @@ export default function App() {
       }
     })
       .then(res => {
+        setCurrentArticleId()
         setMessage(res.data.message)
-        setArticles(articles.concat(article))
-        setCurrentArticleId("")
+        setCurrentArticleId(null)
+        axios.get(articlesUrl, {
+          headers: {
+            authorization: localStorage.getItem("token")
+          }
+        })
+        .then(res => {
+          setArticles(res.data.articles)
+        })
+        .catch(err => console.log(err))
       })
       .catch(err => console.log(err))
   }
