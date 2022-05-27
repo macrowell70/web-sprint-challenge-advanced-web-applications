@@ -5,10 +5,19 @@ const initialFormValues = { title: '', text: '', topic: '' }
 
 export default function ArticleForm(props) {
   const [values, setValues] = useState(initialFormValues)
-  const { postArticle, currentArticleId } = props
+  const { postArticle, currentArticleId, setCurrentArticleId, articles } = props
   // ✨ where are my props? Destructure them here
 
   useEffect(() => {
+    currentArticleId ? articles.map(article => {
+      if (currentArticleId === article.article_id) {
+        setValues({
+          title: article.title,
+          text: article.text,
+          topic: article.topic
+        })
+      }
+    }) : setValues(initialFormValues)
     // ✨ implement
     // Every time the `currentArticle` prop changes, we should check it for truthiness:
     // if it's truthy, we should set its title, text and topic into the corresponding
@@ -59,7 +68,7 @@ export default function ArticleForm(props) {
       </select>
       <div className="button-group">
         <button disabled={isDisabled()} id="submitArticle">Submit</button>
-        <button onClick={() => setValues(initialFormValues)}>Cancel edit</button>
+        {currentArticleId && <button onClick={() => setCurrentArticleId()}>Cancel edit</button>}
       </div>
     </form>
   )

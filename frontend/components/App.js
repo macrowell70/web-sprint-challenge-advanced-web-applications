@@ -70,7 +70,6 @@ export default function App() {
   }
 
   const updateArticle = ({ article_id, article }) => {
-    setCurrentArticleId(article)
     // ✨ implement
     // You got this!
   }
@@ -108,7 +107,7 @@ export default function App() {
         <h1>Advanced Web Applications</h1>
         <nav>
           <NavLink id="loginScreen" to="/">Login</NavLink>
-          <NavLink id="articlesScreen" to={localStorage.token ? "/articles" : "/"}>Articles</NavLink>
+          <NavLink id="articlesScreen" to="/articles">Articles</NavLink>
         </nav>
         <Routes>
           <Route path="/" element={<LoginForm login={login} />} />
@@ -116,13 +115,16 @@ export default function App() {
             <>
               <ArticleForm 
                 postArticle={postArticle} 
-                currentArticleId={currentArticleId} 
+                currentArticleId={currentArticleId}
+                setCurrentArticleId={setCurrentArticleId} 
+                updateArticle={updateArticle}
+                articles={articles}
               />
               <Articles 
                 getArticles={getArticles} 
                 articles={articles}
-                updateArticle={updateArticle}
                 deleteArticle={deleteArticle}
+                setCurrentArticleId={setCurrentArticleId}
               />
             </>
           } />

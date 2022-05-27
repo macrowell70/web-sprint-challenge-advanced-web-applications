@@ -3,11 +3,12 @@ import { Navigate } from 'react-router-dom'
 import PT from 'prop-types'
 
 export default function Articles(props) {
-  const { getArticles, articles, updateArticle, deleteArticle } = props
+  const { getArticles, articles, updateArticle, deleteArticle, setCurrentArticleId } = props
   // ✨ where are my props? Destructure them here
 
-  // ✨ implement conditional logic: if no token exists
-  // we should render a Navigate to login screen (React Router v.6)
+  if (!localStorage.token) {
+    return <Navigate to="/"/> 
+  } else {
 
   useEffect(() => {
     getArticles()
@@ -32,7 +33,7 @@ export default function Articles(props) {
                 <div>
                   <button 
                     disabled={false}
-                    onClick={() => updateArticle(art.article_id)}>
+                    onClick={() => setCurrentArticleId(art.article_id)}>
                     Edit
                   </button>
                   <button 
@@ -47,6 +48,7 @@ export default function Articles(props) {
       }
     </div>
   )
+}
 }
 
 // 🔥 No touchy: Articles expects the following props exactly:
