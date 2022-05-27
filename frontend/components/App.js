@@ -101,7 +101,6 @@ export default function App() {
       }
     })
       .then(res => {
-        console.log(res)
         setMessage(res.data.message)
         axios.get(articlesUrl, {
           headers: {
