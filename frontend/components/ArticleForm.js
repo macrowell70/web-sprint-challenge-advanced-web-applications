@@ -5,7 +5,7 @@ const initialFormValues = { title: '', text: '', topic: '' }
 
 export default function ArticleForm(props) {
   const [values, setValues] = useState(initialFormValues)
-  const { postArticle, currentArticleId, setCurrentArticleId, articles } = props
+  const { postArticle, updateArticle, currentArticleId, setCurrentArticleId, articles } = props
   // ✨ where are my props? Destructure them here
 
   useEffect(() => {
@@ -31,7 +31,9 @@ export default function ArticleForm(props) {
 
   const onSubmit = evt => {
     evt.preventDefault()
-    postArticle(values)
+    currentArticleId ?
+    updateArticle({ article: values }) 
+    : postArticle(values)
   }
 
   const isDisabled = () => {

@@ -42,14 +42,14 @@ export default function App() {
   }
 
   const getArticles = () => {
-    setMessage("")
+    !currentArticleId ? setMessage("") : null
     axios.get(articlesUrl, {
       headers: {
         authorization: localStorage.getItem("token")
       }
     })
       .then(res => {
-        setMessage(res.data.message)
+        !currentArticleId ? setMessage(res.data.message) : null
         setArticles(res.data.articles)
       })
       .catch(err => console.log(err))
@@ -65,13 +65,24 @@ export default function App() {
       .then(res => {
         setMessage(res.data.message)
         setArticles(articles.concat(article))
+        setCurrentArticleId("")
       })
       .catch(err => console.log(err))
   }
 
   const updateArticle = ({ article_id, article }) => {
-    // ✨ implement
-    // You got this!
+    article_id = currentArticleId
+    axios.put(`${articlesUrl}/${article_id}`, article, {
+      headers: {
+        authorization: localStorage.getItem("token")
+      }
+    })
+    .then(res => {
+      setMessage(res.data.message)
+      setCurrentArticleId()
+      getArticles()
+    })
+    .catch(err => console.log(err))
   }
 
   const deleteArticle = article_id => {
