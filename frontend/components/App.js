@@ -43,6 +43,7 @@ export default function App() {
 
   const getArticles = () => {
     !currentArticleId ? setMessage("") : null
+    setSpinnerOn(true)
     axios.get(articlesUrl, {
       headers: {
         authorization: localStorage.getItem("token")
@@ -51,12 +52,14 @@ export default function App() {
       .then(res => {
         !currentArticleId ? setMessage(res.data.message) : null
         setArticles(res.data.articles)
+        setSpinnerOn(false)
       })
       .catch(err => console.log(err))
   }
 
   const postArticle = article => {
     setMessage("")
+    setSpinnerOn(true)
     axios.post(articlesUrl, article, {
       headers: {
         authorization: localStorage.getItem("token")
@@ -73,6 +76,7 @@ export default function App() {
         })
         .then(res => {
           setArticles(res.data.articles)
+          setSpinnerOn(false)
         })
         .catch(err => console.log(err))
       })
@@ -81,6 +85,7 @@ export default function App() {
 
   const updateArticle = ({ article_id, article }) => {
     article_id = currentArticleId
+    setSpinnerOn(true)
     axios.put(`${articlesUrl}/${article_id}`, article, {
       headers: {
         authorization: localStorage.getItem("token")
@@ -90,11 +95,13 @@ export default function App() {
       setMessage(res.data.message)
       setCurrentArticleId()
       getArticles()
+      setSpinnerOn(false)
     })
     .catch(err => console.log(err))
   }
 
   const deleteArticle = article_id => {
+    setSpinnerOn(true)
     axios.delete(`${articlesUrl}/${article_id}`, {
       headers: {
         authorization: localStorage.getItem("token")
@@ -109,6 +116,7 @@ export default function App() {
         })
         .then(res => {
           setArticles(res.data.articles)
+          setSpinnerOn(false)
         })
         .catch(err => console.log(err))
       })
